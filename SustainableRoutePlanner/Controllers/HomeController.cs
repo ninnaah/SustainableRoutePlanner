@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Models;
+using ServiceAgents;
 using SustainableRoutePlanner.Models;
 using System;
 using System.Collections.Generic;
@@ -20,11 +22,22 @@ namespace SustainableRoutePlanner.Controllers
             _logger = logger;
 
             _client = new HttpClient();
+
         }
 
         public IActionResult Index()
         {
+            tmpMethod();
+
             return View();
+        }
+
+        public async void tmpMethod()
+        {
+            RouteRequestModel model = new RouteRequestModel("Gumpendorferstraße 103, Wien, Österreich, 1060", "Heiligenstädterstraße 33, Wien, Österreich, 1190", DateTime.Now, DateTime.Now, "bicycle");
+            MapQuestAgent agent = new MapQuestAgent();
+            agent.loadConfig();
+            await agent.GetRouteValues(model);
         }
 
         public IActionResult Privacy()

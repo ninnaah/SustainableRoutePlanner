@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
@@ -12,32 +14,44 @@ namespace ServiceAgents
     public class MapQuestAgent
     {
         private static JObject _boundingBox;
+
         private static string _key;
         private static string _dirPath;
 
-
-        public MapQuestAgent(string key, string dirPath)
+        public MapQuestAgent()
         {
-            _dirPath = dirPath;
-            _key = key;
+            loadConfig();
         }
 
-        public async Task<string> GetTourValues(TourItem tour)
+        public void loadConfig()
         {
-            Task<string> responseBodyTask = SendRouteRequest(tour);
+            IConfiguration configBuilder = new ConfigurationBuilder()
+                .AddJsonFile("config.json", true)
+                .Build();
+
+            ConfigModel config = configBuilder.Get<ConfigModel>();
+            _key = config.MapQuestKey;
+            _dirPath = config.MapsPath;
+
+            Debug.WriteLine($"Loaded configuration");
+        }
+
+        public async Task<string> GetRouteValues(RouteRequestModel routeReq)
+        {
+            Task<string> responseBodyTask = SendRouteRequest(routeReq);
             string responseBody = await responseBodyTask;
 
             return responseBody;
         }
 
-        public static async Task<string> SendRouteRequest(TourItem tour)
+        public static async Task<string> SendRouteRequest(RouteRequestModel routeReq)
         {
-            string mode = tour.TransportMode;
+            string mode = routeReq.TransportMode;
 
-            if (mode == "Car")
-                mode = "fastest";
+            /*if (mode == "Car")
+                mode = "fastest";*/
 
-            string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&from={tour.From}&to={tour.To}&routeType={mode}";
+            string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&from={routeReq.ArrivalLocation}&to={routeReq.DepartureLocation}&routeType={mode}";
 
             HttpClient httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.GetAsync(getRequest);
@@ -50,12 +64,12 @@ namespace ServiceAgents
 
             Debug.WriteLine("Got response from directions API");
 
-            SendMapRequest(tour, sessionId);
+            SendMapRequest(routeReq, sessionId);
 
             return responseBody;
         }
 
-        public static async void SendMapRequest(TourItem tour, string sessionId)
+        public static async void SendMapRequest(RouteRequestModel routeReq, string sessionId)
         {
             try
             {
@@ -63,13 +77,15 @@ namespace ServiceAgents
                 {
                     return;
                 }
+
                 string lowerRightLng = (string)_boundingBox["lr"]["lng"];
                 string lowerRightLat = (string)_boundingBox["lr"]["lat"];
                 string upperLeftLng = (string)_boundingBox["ul"]["lng"];
                 string upperLeftLat = (string)_boundingBox["ul"]["lat"];
 
-                Directory.CreateDirectory($@"{_dirPath}/maps/");
-                string filePath = $@"{_dirPath}/maps/{tour.Name}.png";
+                Directory.CreateDirectory($@"{_dirPath}/");
+                //string filePath = $@"{_dirPath}/maps/{routeReq.Name}.png";
+                string filePath = $@"{_dirPath}/maps/something.png";
 
                 string getRequest = $"https://www.mapquestapi.com/staticmap/v5/map?key={_key}&size=1240,960&session={sessionId}&boundingBox={upperLeftLat},{upperLeftLng},{lowerRightLat},{lowerRightLng}&zoom=15";
 
@@ -80,7 +96,8 @@ namespace ServiceAgents
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                File.Delete(@$"{_dirPath}/maps/{tour.Name}.png");
+                //File.Delete(@$"{_dirPath}/maps/{routeReq.Name}.png");
+                File.Delete(@$"{_dirPath}/maps/something.png");
                 Debug.WriteLine($"Cannot load tourmap: {ex.Message}");
             }
 
