@@ -46,12 +46,32 @@ namespace ServiceAgents
 
         public static async Task<string> SendRouteRequest(RouteRequestModel routeReq)
         {
-            string mode = routeReq.TransportMode;
+            int timeType = 0;
 
-            /*if (mode == "Car")
-                mode = "fastest";*/
+            //MM/DD/YYYY
+            string date = "";
 
-            string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&from={routeReq.ArrivalLocation}&to={routeReq.DepartureLocation}&routeType={mode}";
+            //hh:mm
+            string localTime = "";
+
+
+            if (routeReq.ArrivalTime != null)
+            {
+                timeType = 3;
+                date = routeReq.ArrivalTime?.ToString("MM/dd/yyyy");
+                localTime = routeReq.ArrivalTime?.ToString("hh:mm");
+
+            }
+            else if (routeReq.DepartureTime != null)
+            {
+                timeType = 2;
+                date = routeReq.DepartureTime?.ToString("MM/dd/yyyy");
+                localTime = routeReq.DepartureTime?.ToString("hh:mm");
+            }
+
+            string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&from={routeReq.ArrivalLocation}&to={routeReq.DepartureLocation}&routeType={routeReq.TransportMode}&timeType={timeType}&date={date}&localTime={localTime}";
+            Debug.WriteLine($"Directions Request: {getRequest}");
+
 
             HttpClient httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.GetAsync(getRequest);
@@ -83,11 +103,11 @@ namespace ServiceAgents
                 string upperLeftLng = (string)_boundingBox["ul"]["lng"];
                 string upperLeftLat = (string)_boundingBox["ul"]["lat"];
 
-                Directory.CreateDirectory($@"{_dirPath}/");
-                //string filePath = $@"{_dirPath}/maps/{routeReq.Name}.png";
-                string filePath = $@"{_dirPath}/maps/something.png";
+                string filePath = $@"{_dirPath}/{routeReq.Id}.png";
 
                 string getRequest = $"https://www.mapquestapi.com/staticmap/v5/map?key={_key}&size=1240,960&session={sessionId}&boundingBox={upperLeftLat},{upperLeftLng},{lowerRightLat},{lowerRightLng}&zoom=15";
+                Debug.WriteLine($"StaticMap Request: {getRequest}");
+
 
                 using WebClient client = new();
                 await client.DownloadFileTaskAsync(new Uri(getRequest), filePath);
@@ -96,8 +116,7 @@ namespace ServiceAgents
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                //File.Delete(@$"{_dirPath}/maps/{routeReq.Name}.png");
-                File.Delete(@$"{_dirPath}/maps/something.png");
+                File.Delete(@$"{_dirPath}/{routeReq.Id}.png");
                 Debug.WriteLine($"Cannot load tourmap: {ex.Message}");
             }
 

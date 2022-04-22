@@ -19,8 +19,8 @@ namespace Models
         public string DepartureLocation { get; set; }
         public string ArrivalLocation { get; set; }
 
-        public DateTime DepartureTime { get; set; }
-        public DateTime ArrivalTime { get; set; }
+        public DateTime? DepartureTime { get; set; }
+        public DateTime? ArrivalTime { get; set; }
 
         //as enum
         public string TransportMode { get; set; }
