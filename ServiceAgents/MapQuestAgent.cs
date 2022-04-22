@@ -69,7 +69,7 @@ namespace ServiceAgents
                 localTime = routeReq.DepartureTime?.ToString("hh:mm");
             }
 
-            string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&from={routeReq.ArrivalLocation}&to={routeReq.DepartureLocation}&routeType={routeReq.TransportMode}&timeType={timeType}&date={date}&localTime={localTime}";
+            string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&from={routeReq.ArrivalLocation}&to={routeReq.DepartureLocation}&routeType={routeReq.RouteType}&timeType={timeType}&date={date}&localTime={localTime}";
             Debug.WriteLine($"Directions Request: {getRequest}");
 
 
