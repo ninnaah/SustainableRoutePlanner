@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models.Transport
+namespace Models
 {
-    public class Bike : IVehicle
+    public class Config
     {
+        public string MapsPath { get; set; }
+        public string MapQuestKey { get; set; }
     }
 }

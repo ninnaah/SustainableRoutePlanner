@@ -1,42 +1,40 @@
 {
-  "car": {
-    "gas": {
-      "CO2 equivalent": 226.9,
-      "CO2": 220.0,
-      "NOX": 0.26,
-      "PM10": 0.028
-    },
-    "diesel": {
-      "CO2 equivalent": 214.1,
-      "CO2": 205.2,
-      "NOX": 0.86,
-      "PM10": 0.030
-    },
-    "electric": {
-      "CO2 equivalent": 87.6,
-      "CO2": 82.3,
-      "NOX": 0.13,
-      "PM10": 0.017
-    }
+  "gasCar": {
+    "CO2Equivalent": 226.9,
+    "CO2": 220.0,
+    "NOX": 0.26,
+    "PM10": 0.028
+  },
+  "dieselCar": {
+    "CO2Equivalent": 214.1,
+    "CO2": 205.2,
+    "NOX": 0.86,
+    "PM10": 0.030
+  },
+  "electricCar": {
+    "CO2Equivalent": 87.6,
+    "CO2": 82.3,
+    "NOX": 0.13,
+    "PM10": 0.017
   },
   "bus": {
-    "CO2 equivalent": 59.5,
+    "CO2Equivalent": 59.5,
     "CO2": 57.5,
     "NOX": 0.14,
     "PM10": 0.006
   },
   "publicTransport": {
-    "CO2 equivalent": 12.6,
+    "CO2Equivalent": 12.6,
     "CO2": 7.9,
     "NOX": 0.04,
     "PM10": 0.003
   },
-  "bike": {
+  "bicycle": {
     "CO2": 5.64,
     "NOX": 0.0052,
     "PM10": 0.0002
   },
-  "e-bike": {
+  "eBike": {
     "CO2": 5.0
   }
 }

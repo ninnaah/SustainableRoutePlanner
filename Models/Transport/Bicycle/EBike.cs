@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Models.Transport
 {
-    public class EBike : IVehicle
+    public class EBike : IBicycle
     {
+        public double CO2 { get; set; }
     }
 }

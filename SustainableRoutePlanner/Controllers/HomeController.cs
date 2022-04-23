@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EmissionCalculator;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models;
+using Models.Transport;
 using ServiceAgents;
 using SustainableRoutePlanner.Models;
 using System;
@@ -34,10 +36,13 @@ namespace SustainableRoutePlanner.Controllers
 
         public async void tmpMethod()
         {
-            RouteRequestModel model = new RouteRequestModel("Gumpendorferstraße 103, Wien, Österreich, 1060", "Heiligenstädterstraße 33, Wien, Österreich, 1190", DateTime.Now, DateTime.Now, "bicycle");
+            CarEmissionCalculator calculator = new CarEmissionCalculator();
+            calculator.CalcEmissions();
+            /*Car car = new Car();
+            RouteRequestModel model = new RouteRequestModel(car, "Gumpendorferstraße 103, Wien, Österreich, 1060", "Heiligenstädterstraße 33, Wien, Österreich, 1190", DateTime.Now, DateTime.Now, "bicycle");
             MapQuestAgent agent = new MapQuestAgent();
             agent.loadConfig();
-            await agent.GetRouteValues(model);
+            await agent.GetRouteValues(model);*/
         }
 
         public IActionResult Privacy()

@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace Models.Transport
 {
-    public enum PublicTransportType
+    public interface IBicycle
     {
-        UBahn, 
-        Straßenbahn,
-        SBahn,
-        Regionalzug
+        double CO2 { get; set; }
     }
 }

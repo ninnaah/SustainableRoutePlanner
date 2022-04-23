@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Models.Transport
 {
-    public enum CarType
+    public class Bicycle : IBicycle
     {
-        Gas,
-        Diesel,
-        Electric
+        public double CO2 { get; set; }
+        public double NOX { get; set; }
+        public double PM10 { get; set; }
+
     }
 }

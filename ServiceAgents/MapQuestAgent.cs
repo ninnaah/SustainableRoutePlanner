@@ -3,6 +3,7 @@ using Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -29,23 +30,25 @@ namespace ServiceAgents
                 .AddJsonFile("config.json", true)
                 .Build();
 
-            ConfigModel config = configBuilder.Get<ConfigModel>();
+            Config config = configBuilder.Get<Config>();
             _key = config.MapQuestKey;
             _dirPath = config.MapsPath;
 
             Debug.WriteLine($"Loaded configuration");
         }
 
-        public async Task<string> GetRouteValues(RouteRequestModel routeReq)
+        public async Task<RouteResponse> GetRouteValues(RouteRequest routeReq)
         {
-            Task<string> responseBodyTask = SendRouteRequest(routeReq);
-            string responseBody = await responseBodyTask;
+            Task<RouteResponse> responseModelTask = SendRouteRequest(routeReq);
+            RouteResponse responseModel = await responseModelTask;
 
-            return responseBody;
+            return responseModel;
         }
 
-        public static async Task<string> SendRouteRequest(RouteRequestModel routeReq)
+        public static async Task<RouteResponse> SendRouteRequest(RouteRequest routeRequest)
         {
+            RouteResponse routeResponse = new RouteResponse();
+
             int timeType = 0;
 
             //MM/DD/YYYY
@@ -54,22 +57,23 @@ namespace ServiceAgents
             //hh:mm
             string localTime = "";
 
-
-            if (routeReq.ArrivalTime != null)
+            if (routeRequest.ArrivalTime != null)
             {
                 timeType = 3;
-                date = routeReq.ArrivalTime?.ToString("MM/dd/yyyy");
-                localTime = routeReq.ArrivalTime?.ToString("hh:mm");
+                date = routeRequest.ArrivalTime?.ToString("MM/dd/yyyy");
+                localTime = routeRequest.ArrivalTime?.ToString("hh:mm");
+                routeResponse.ArrivalTime = routeRequest.ArrivalTime;
 
             }
-            else if (routeReq.DepartureTime != null)
+            else if (routeRequest.DepartureTime != null)
             {
                 timeType = 2;
-                date = routeReq.DepartureTime?.ToString("MM/dd/yyyy");
-                localTime = routeReq.DepartureTime?.ToString("hh:mm");
+                date = routeRequest.DepartureTime?.ToString("MM/dd/yyyy");
+                localTime = routeRequest.DepartureTime?.ToString("hh:mm");
+                routeResponse.DepartureTime = routeRequest.DepartureTime;
             }
 
-            string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&from={routeReq.ArrivalLocation}&to={routeReq.DepartureLocation}&routeType={routeReq.RouteType}&timeType={timeType}&date={date}&localTime={localTime}";
+            string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&from={routeRequest.ArrivalLocation}&to={routeRequest.DepartureLocation}&routeType={routeRequest.RouteType}&timeType={timeType}&date={date}&localTime={localTime}";
             Debug.WriteLine($"Directions Request: {getRequest}");
 
 
@@ -84,12 +88,33 @@ namespace ServiceAgents
 
             Debug.WriteLine("Got response from directions API");
 
-            SendMapRequest(routeReq, sessionId);
+            SendMapRequest(routeRequest, sessionId);
 
-            return responseBody;
+
+            routeResponse.Duration = (double) obj["route"]["time"]/60;
+            routeResponse.Distance = (double) obj["route"]["distance"];
+
+            //maneuvers
+            JObject legs = obj["route"]["legs"][0] as JObject;
+
+            List<JObject> maneuvers = new List<JObject>();
+            foreach (JObject maneuver in legs["maneuvers"])
+            {
+                maneuvers.Add(maneuver);
+            }
+
+            foreach (JObject maneuver in maneuvers)
+            {
+                RouteResponseManeuver direction = new RouteResponseManeuver();
+                direction.Text = (string)maneuver["narrative"];
+                direction.Image = (string)maneuver["iconUrl"];
+                routeResponse.Maneuvers.Add(direction);
+            }
+
+            return routeResponse;
         }
 
-        public static async void SendMapRequest(RouteRequestModel routeReq, string sessionId)
+        public static async void SendMapRequest(RouteRequest routeReq, string sessionId)
         {
             try
             {
