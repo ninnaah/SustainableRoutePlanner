@@ -17,35 +17,13 @@ namespace SustainableRoutePlanner.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private HttpClient _client;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-
-            _client = new HttpClient();
-
         }
 
         public IActionResult Index()
-        {
-            tmpMethod();
-
-            return View();
-        }
-
-        public async void tmpMethod()
-        {
-            CarEmissionCalculator calculator = new CarEmissionCalculator();
-            calculator.CalcEmissions();
-            /*Car car = new Car();
-            RouteRequestModel model = new RouteRequestModel(car, "Gumpendorferstraße 103, Wien, Österreich, 1060", "Heiligenstädterstraße 33, Wien, Österreich, 1190", DateTime.Now, DateTime.Now, "bicycle");
-            MapQuestAgent agent = new MapQuestAgent();
-            agent.loadConfig();
-            await agent.GetRouteValues(model);*/
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
@@ -55,5 +33,6 @@ namespace SustainableRoutePlanner.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class EmissionFactorsConfig
+    public class EmissionFactors
     {
         public GasCar GasCar { get; set; }
         public DieselCar DieselCar { get; set; }

@@ -13,6 +13,7 @@ namespace EmissionCalculator
 {
     public class BicycleEmissionCalculator : IEmissionCalculator
     {
+        public EmissionFactorsLoader EmissionFactors { get; set; }
         public IBicycle Bicycle;
 
         public string DepartureLocation { get; set; }
@@ -21,8 +22,9 @@ namespace EmissionCalculator
         public DateTime? DepartureTime { get; set; }
         public DateTime? ArrivalTime { get; set; }
 
-        public BicycleEmissionCalculator(IBicycle bicycle, string departureLocation, string arrivalLocation, DateTime departureTime, DateTime arrivalTime)
+        public BicycleEmissionCalculator(EmissionFactorsLoader emissionFactors, IBicycle bicycle, string departureLocation, string arrivalLocation, DateTime? departureTime, DateTime? arrivalTime)
         {
+            EmissionFactors = emissionFactors;
             Bicycle = bicycle;
 
             DepartureLocation = departureLocation;
@@ -33,30 +35,27 @@ namespace EmissionCalculator
 
         }
 
-        public void LoadEmissionFactors()
+        public async Task<RouteResponse> CalcEmissions()
         {
-            IConfiguration configBuilder = new ConfigurationBuilder()
-                .AddJsonFile("emissionFactors.json", true)
-                .Build();
+            RouteResponse response = await GetRoute();
 
-            EmissionFactorsConfig config = configBuilder.Get<EmissionFactorsConfig>();
+            if(Bicycle.GetType() == typeof(Bicycle))
+            {
+                response.RouteEmissions.CO2 = EmissionFactors.EmissionFactors.Bicycle.CO2 * response.Distance;
+                response.RouteEmissions.NOX = EmissionFactors.EmissionFactors.Bicycle.NOX * response.Distance;
+                response.RouteEmissions.PM10 = EmissionFactors.EmissionFactors.Bicycle.PM10 * response.Distance;
+            }
+            else if(Bicycle.GetType() == typeof(EBike))
+            {
+                response.RouteEmissions.CO2 = EmissionFactors.EmissionFactors.EBike.CO2 * response.Distance;
+            }
 
-            Debug.WriteLine($"Loaded emissionFactors");
-        }
-
-
-        public async void CalcEmissions()
-        {
-
-            //await GetRoute();
-
-            //cald emissionfac * km
-            
+            return response;
         }
 
         public async Task<RouteResponse> GetRoute()
         {
-            RouteRequest reqModel = new RouteRequest("Gumpendorferstraße 103, Wien, Österreich, 1060", "Heiligenstädterstraße 33, Wien, Österreich, 1190", DateTime.Now, DateTime.Now, "bicycle");
+            RouteRequest reqModel = new RouteRequest(DepartureLocation, ArrivalLocation, DepartureTime, ArrivalTime, "bicycle");
             MapQuestAgent agent = new MapQuestAgent();
             return await agent.GetRouteValues(reqModel);
 

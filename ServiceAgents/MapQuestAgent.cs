@@ -21,10 +21,10 @@ namespace ServiceAgents
 
         public MapQuestAgent()
         {
-            loadConfig();
+            LoadConfig();
         }
 
-        public void loadConfig()
+        public void LoadConfig()
         {
             IConfiguration configBuilder = new ConfigurationBuilder()
                 .AddJsonFile("config.json", true)
@@ -48,13 +48,10 @@ namespace ServiceAgents
         public static async Task<RouteResponse> SendRouteRequest(RouteRequest routeRequest)
         {
             RouteResponse routeResponse = new RouteResponse();
+            routeResponse.Id = routeRequest.Id;
 
             int timeType = 0;
-
-            //MM/DD/YYYY
             string date = "";
-
-            //hh:mm
             string localTime = "";
 
             if (routeRequest.ArrivalTime != null)
@@ -105,9 +102,7 @@ namespace ServiceAgents
 
             foreach (JObject maneuver in maneuvers)
             {
-                RouteResponseManeuver direction = new RouteResponseManeuver();
-                direction.Text = (string)maneuver["narrative"];
-                direction.Image = (string)maneuver["iconUrl"];
+                RouteManeuver direction = new RouteManeuver((string)maneuver["narrative"], (string)maneuver["iconUrl"]);
                 routeResponse.Maneuvers.Add(direction);
             }
 

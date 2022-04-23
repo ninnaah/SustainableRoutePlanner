@@ -1,0 +1,41 @@
+﻿@model SustainableRoutePlanner.Models.CreateRoute
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Route und Emissionen berechnen</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="Display">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="DepartureLocation" class="control-label">Start</label>
+                <input asp-for="DepartureLocation" class="form-control" />
+                <span asp-validation-for="DepartureLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArrivalLocation" class="control-label">Ziel</label>
+                <input asp-for="ArrivalLocation" class="form-control" />
+                <span asp-validation-for="ArrivalLocation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DepartureTime" class="control-label">Abfahrt</label>
+                <input asp-for="DepartureTime" class="form-control" />
+                <span asp-validation-for="DepartureTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArrivalTime" class="control-label">Ankunft</label>
+                <input asp-for="ArrivalTime" class="form-control" />
+                <span asp-validation-for="ArrivalTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Route berechnen" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+

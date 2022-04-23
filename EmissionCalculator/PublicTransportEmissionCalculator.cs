@@ -13,6 +13,7 @@ namespace EmissionCalculator
 {
     public class PublicTransportEmissionCalculator : IEmissionCalculator
     {
+        public EmissionFactorsLoader EmissionFactors { get; set; }
         public IPublicTransport PublicTransport;
 
         public string DepartureLocation { get; set; }
@@ -21,8 +22,9 @@ namespace EmissionCalculator
         public DateTime? DepartureTime { get; set; }
         public DateTime? ArrivalTime { get; set; }
 
-        public PublicTransportEmissionCalculator(IPublicTransport publicTransport, string departureLocation, string arrivalLocation, DateTime departureTime, DateTime arrivalTime)
+        public PublicTransportEmissionCalculator(EmissionFactorsLoader emissionFactors, IPublicTransport publicTransport, string departureLocation, string arrivalLocation, DateTime? departureTime, DateTime? arrivalTime)
         {
+            EmissionFactors = emissionFactors;
             PublicTransport = publicTransport;
 
             DepartureLocation = departureLocation;
@@ -33,25 +35,26 @@ namespace EmissionCalculator
 
         }
 
-        public void LoadEmissionFactors()
+        public async Task<RouteResponse> CalcEmissions()
         {
-            IConfiguration configBuilder = new ConfigurationBuilder()
-                .AddJsonFile("emissionFactors.json", true)
-                .Build();
+            RouteResponse response = await GetRoute();
 
-            EmissionFactorsConfig config = configBuilder.Get<EmissionFactorsConfig>();
+            if (PublicTransport.GetType() == typeof(PublicTransport))
+            {
+                response.RouteEmissions.CO2Equivalent = EmissionFactors.EmissionFactors.PublicTransport.CO2Equivalent * response.Distance;
+                response.RouteEmissions.CO2 = EmissionFactors.EmissionFactors.PublicTransport.CO2 * response.Distance;
+                response.RouteEmissions.NOX = EmissionFactors.EmissionFactors.PublicTransport.NOX * response.Distance;
+                response.RouteEmissions.PM10 = EmissionFactors.EmissionFactors.PublicTransport.PM10 * response.Distance;
+            }
+            else if (PublicTransport.GetType() == typeof(Bus))
+            {
+                response.RouteEmissions.CO2Equivalent = EmissionFactors.EmissionFactors.Bus.CO2Equivalent * response.Distance;
+                response.RouteEmissions.CO2 = EmissionFactors.EmissionFactors.Bus.CO2 * response.Distance;
+                response.RouteEmissions.NOX = EmissionFactors.EmissionFactors.Bus.NOX * response.Distance;
+                response.RouteEmissions.PM10 = EmissionFactors.EmissionFactors.Bus.PM10 * response.Distance;
+            }
 
-            Debug.WriteLine($"Loaded emissionFactors");
-        }
-
-
-        public async void CalcEmissions()
-        {
-
-            //await GetRoute();
-
-            //cald emissionfac * km
-
+            return response;
         }
 
         public async Task<RouteResponse> GetRoute()

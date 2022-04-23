@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceAgents", "ServiceAge
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{21FDF8CA-E820-4F3D-A143-B54B526CE3FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmissionCalculator", "EmissionCalculator\EmissionCalculator.csproj", "{A8BEBE13-B582-4A52-B703-DEA319AB24B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmissionCalculator", "EmissionCalculator\EmissionCalculator.csproj", "{A8BEBE13-B582-4A52-B703-DEA319AB24B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

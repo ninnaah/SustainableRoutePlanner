@@ -5,7 +5,7 @@ namespace Models
 {
     public class RouteRequest
     {
-        public RouteRequest(string departureLocation, string arrivalLocation, DateTime departureTime, DateTime arrivalTime, string routeType)
+        public RouteRequest(string departureLocation, string arrivalLocation, DateTime? departureTime, DateTime? arrivalTime, string routeType)
         {
             DepartureLocation = departureLocation;
             ArrivalLocation = arrivalLocation;

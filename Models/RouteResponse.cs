@@ -11,7 +11,8 @@ namespace Models
     {
         public RouteResponse()
         {
-            Maneuvers = new List<RouteResponseManeuver>();
+            Maneuvers = new List<RouteManeuver>();
+            RouteEmissions = new RouteEmissions();
         }
 
         public DateTime? DepartureTime { get; set; }
@@ -20,6 +21,11 @@ namespace Models
 
         public double Distance { get; set; }
 
-        public List<RouteResponseManeuver> Maneuvers { get; set; }
+        public List<RouteManeuver> Maneuvers { get; set; }
+
+        public RouteEmissions RouteEmissions { get; set; }
+
+        public Guid Id { get; set; }
+
     }
 }
