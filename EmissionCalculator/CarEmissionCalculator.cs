@@ -68,7 +68,7 @@ namespace EmissionCalculator
 
         public async Task<RouteResponse> GetRoute()
         {
-            RouteRequest reqModel = new RouteRequest(DepartureLocation, ArrivalLocation, DepartureTime, ArrivalTime, "fastest");
+            MapQuestRequest reqModel = new MapQuestRequest(DepartureLocation, ArrivalLocation, DepartureTime, ArrivalTime, "fastest");
             MapQuestAgent agent = new MapQuestAgent();
             return await agent.GetRouteValues(reqModel);
         }

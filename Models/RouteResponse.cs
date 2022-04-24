@@ -9,8 +9,9 @@ namespace Models
 {
     public class RouteResponse
     {
-        public RouteResponse()
+        public RouteResponse(Guid id)
         {
+            Id = id;
             Maneuvers = new List<RouteManeuver>();
             RouteEmissions = new RouteEmissions();
         }

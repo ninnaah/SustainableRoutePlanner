@@ -3,12 +3,12 @@ using System;
 
 namespace Models
 {
-    public class RouteRequest
+    public class MapQuestRequest
     {
-        public RouteRequest(string departureLocation, string arrivalLocation, DateTime? departureTime, DateTime? arrivalTime, string routeType)
+        public MapQuestRequest(string departureAdress, string arrivalAdress, DateTime? departureTime, DateTime? arrivalTime, string routeType)
         {
-            DepartureLocation = departureLocation;
-            ArrivalLocation = arrivalLocation;
+            DepartureAdress = departureAdress;
+            ArrivalAdress = arrivalAdress;
 
             DepartureTime = departureTime;
             ArrivalTime = arrivalTime;
@@ -18,8 +18,8 @@ namespace Models
             Id = Guid.NewGuid();
         }
 
-        public string DepartureLocation { get; set; }
-        public string ArrivalLocation { get; set; }
+        public string DepartureAdress { get; set; }
+        public string ArrivalAdress { get; set; }
 
         public DateTime? DepartureTime { get; set; }
         public DateTime? ArrivalTime { get; set; }

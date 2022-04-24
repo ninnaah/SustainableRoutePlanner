@@ -12,17 +12,17 @@ namespace SustainableRoutePlanner.Models
 
         }
 
-        public CreateRoute(string departureLocation, string arrivalLocation, DateTime? departureTime, DateTime? arrivalTime)
+        public CreateRoute(string departureAdress, string arrivalAdress, DateTime? departureTime, DateTime? arrivalTime)
         {
-            DepartureLocation = departureLocation;
-            ArrivalLocation = arrivalLocation;
+            DepartureAdress = departureAdress;
+            ArrivalAdress = arrivalAdress;
 
             DepartureTime = departureTime;
             ArrivalTime = arrivalTime;
         }
 
-        public string DepartureLocation { get; set; }
-        public string ArrivalLocation { get; set; }
+        public string DepartureAdress { get; set; }
+        public string ArrivalAdress { get; set; }
 
         public DateTime? DepartureTime { get; set; }
         public DateTime? ArrivalTime { get; set; }

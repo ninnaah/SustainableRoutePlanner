@@ -37,18 +37,27 @@ namespace ServiceAgents
             Debug.WriteLine($"Loaded configuration");
         }
 
-        public async Task<RouteResponse> GetRouteValues(RouteRequest routeReq)
+        public async Task<RouteResponse> GetRouteValues(MapQuestRequest routeReq)
         {
+            routeReq = DetermineLocation(routeReq);
+
             Task<RouteResponse> responseModelTask = SendRouteRequest(routeReq);
             RouteResponse responseModel = await responseModelTask;
 
             return responseModel;
         }
 
-        public static async Task<RouteResponse> SendRouteRequest(RouteRequest routeRequest)
+        private MapQuestRequest DetermineLocation(MapQuestRequest routeReq)
         {
-            RouteResponse routeResponse = new RouteResponse();
-            routeResponse.Id = routeRequest.Id;
+            routeReq.DepartureAdress = $"{routeReq.DepartureAdress}, Wien, Österreich";
+            routeReq.ArrivalAdress = $"{routeReq.ArrivalAdress}, Wien, Österreich";
+
+            return routeReq;
+        }
+
+        private static async Task<RouteResponse> SendRouteRequest(MapQuestRequest routeRequest)
+        {
+            RouteResponse routeResponse = new RouteResponse(routeRequest.Id);
 
             int timeType = 0;
             string date = "";
@@ -70,7 +79,7 @@ namespace ServiceAgents
                 routeResponse.DepartureTime = routeRequest.DepartureTime;
             }
 
-            string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&from={routeRequest.ArrivalLocation}&to={routeRequest.DepartureLocation}&routeType={routeRequest.RouteType}&timeType={timeType}&date={date}&localTime={localTime}";
+            string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&unit=k&from={routeRequest.ArrivalAdress}&to={routeRequest.DepartureAdress}&routeType={routeRequest.RouteType}&timeType={timeType}&date={date}&localTime={localTime}";
             Debug.WriteLine($"Directions Request: {getRequest}");
 
 
@@ -109,7 +118,7 @@ namespace ServiceAgents
             return routeResponse;
         }
 
-        public static async void SendMapRequest(RouteRequest routeReq, string sessionId)
+        public static async void SendMapRequest(MapQuestRequest routeReq, string sessionId)
         {
             try
             {
@@ -123,7 +132,7 @@ namespace ServiceAgents
                 string upperLeftLng = (string)_boundingBox["ul"]["lng"];
                 string upperLeftLat = (string)_boundingBox["ul"]["lat"];
 
-                string filePath = $@"{_dirPath}/{routeReq.Id}.png";
+                string filePath = $@"{_dirPath}/{routeReq.Id} .png";
 
                 string getRequest = $"https://www.mapquestapi.com/staticmap/v5/map?key={_key}&size=1240,960&session={sessionId}&boundingBox={upperLeftLat},{upperLeftLng},{lowerRightLat},{lowerRightLng}&zoom=15";
                 Debug.WriteLine($"StaticMap Request: {getRequest}");
@@ -136,7 +145,7 @@ namespace ServiceAgents
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                File.Delete(@$"{_dirPath}/{routeReq.Id}.png");
+                File.Delete(@$"{_dirPath}/{routeReq.Id} .png");
                 Debug.WriteLine($"Cannot load tourmap: {ex.Message}");
             }
 
