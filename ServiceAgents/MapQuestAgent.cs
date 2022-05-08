@@ -138,14 +138,24 @@ namespace ServiceAgents
                 string getRequest = $"https://www.mapquestapi.com/staticmap/v5/map?key={_key}&size=1240,960&session={sessionId}&boundingBox={upperLeftLat},{upperLeftLng},{lowerRightLat},{lowerRightLng}&zoom=15";
                 Debug.WriteLine($"StaticMap Request: {getRequest}");
 
-                using WebClient client = new();
-                await client.DownloadFileTaskAsync(new Uri(getRequest), filePath);
+                using (var client = new WebClient())
+                using (var completedSignal = new AutoResetEvent(false))
+                {
+                    client.DownloadFileCompleted += (s, e) =>
+                    {
+                        Debug.WriteLine("Download file completed.");
+                        completedSignal.Set();
+                    };
+
+                    client.DownloadFileAsync(new Uri(getRequest), filePath);
+
+                    completedSignal.WaitOne();
+                }
 
                 Debug.WriteLine("Got response from staticMap API");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
                 File.Delete(@$"{_dirPath}/{routeReq.Id}.png");
                 Debug.WriteLine($"Cannot load tourmap: {ex.Message}");
             }

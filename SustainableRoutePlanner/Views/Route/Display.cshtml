@@ -4,57 +4,149 @@
     ViewData["Title"] = "Display";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-<h1 class="display-2">Routen</h1>
+    /* Create three equal columns that floats next to each other */
+    .column {
+        float: left;
+        width: 33.33%;
+        padding: 10px;
+        height: 500px; /* Should be removed. Only for demonstration */
+    }
 
-<h4 class="display-7">Start: @Model.DepartureAdress</h4>
-<h4 class="display-7">Ziel: @Model.ArrivalAdress</h4>
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .maneuver {
+        overflow-y: scroll;
+        height: 450px; /* Should be removed. Only for demonstration */
+    }
+
+
+</style>
+
+
+
+<h1>Routen</h1>
+
+<!--Header-->
+<div>Start: @Model.DepartureAdress</div>
+<div>Ziel: @Model.ArrivalAdress</div>
 
 <!-- only one-->
-<h4 class="display-7">Abfahrt: @Model.DepartureTime</h4>
-<h4 class="display-7">Ankunft: @Model.ArrivalTime</h4>
+<div>Abfahrt: @Model.DepartureTime</div>
+<div>Ankunft: @Model.ArrivalTime</div>
 
 
 
+<h2>Auto</h2>
 
+<div class="row">
+    <div class="column" style="background-color:#aaa;">
+        <div>Dauer: @Model.CarRoute.Duration min</div>
+        <div>Distanz: @Model.CarRoute.Distance km</div>
+        <div>Abfahrt: @Model.CarRoute.DepartureTime</div>
+        <div>Ankunft: @Model.CarRoute.ArrivalTime</div>
 
-<h3 class="display-4">Auto</h3>
+        <h3>Emissionen</h3>
+        <div>CO2 Equivalent: @Model.CarRoute.RouteEmissions.CO2Equivalent g</div>
+        <div>CO2: @Model.CarRoute.RouteEmissions.CO2 g</div>
+        <div>NOX: @Model.CarRoute.RouteEmissions.NOX g</div>
+        <div>PM10: @Model.CarRoute.RouteEmissions.PM10 g</div>
+    </div>
+    <div class="column" style="background-color:#bbb;">
+        <img src="~/Maps/@(Model.CarRoute.Id).png" alt="Car route map" height="300" />
+    </div>
+    <div class="column" style="background-color:#ccc;">
 
-<h5 class="display-8">Dauer: @Model.CarRoute.Duration min</h5>
-<h5 class="display-8">Distanz: @Model.CarRoute.Distance km</h5>
-<h5 class="display-8">Abfahrt: @Model.CarRoute.DepartureTime</h5>
-<h5 class="display-8">Ankunft: @Model.CarRoute.ArrivalTime</h5>
+        <h3>Maneuvers</h3>
+        <div class="maneuver">
+            @foreach (var maneuver in Model.CarRoute.Maneuvers)
+            {
+                <div>@maneuver.Text</div>
+                <img src="@maneuver.Image" Height="40" Width="40" />
+            }
+        </div>
 
-<h4 class="display-7">Emissionen</h4>
-<h6 class="display-8">CO2 Equivalent: @Model.CarRoute.RouteEmissions.CO2Equivalent g</h6>
-<h6 class="display-8">CO2: @Model.CarRoute.RouteEmissions.CO2 g</h6>
-<h6 class="display-8">NOX: @Model.CarRoute.RouteEmissions.NOX g</h6>
-<h6 class="display-8">PM10: @Model.CarRoute.RouteEmissions.PM10 g</h6>
+    </div>
+</div>
 
-<img src="~/Maps/@(Model.CarRoute.Id).png" alt="Car route map" />
 
 <h2>Öffentliche Verkehrsmittel</h2>
-<h5 class="display-8">Dauer: @Model.PublicTransportRoute.Duration min</h5>
-<h5 class="display-8">Distanz: @Model.PublicTransportRoute.Distance km (Luftlinie)</h5>
-<h5 class="display-8">Abfahrt: @Model.PublicTransportRoute.DepartureTime</h5>
-<h5 class="display-8">Ankunft: @Model.PublicTransportRoute.ArrivalTime</h5>
 
-<h4 class="display-7">Emissionen</h4>
-<h6 class="display-8">CO2 Equivalent: @Model.PublicTransportRoute.RouteEmissions.CO2Equivalent g</h6>
-<h6 class="display-8">CO2: @Model.PublicTransportRoute.RouteEmissions.CO2 g</h6>
-<h6 class="display-8">NOX: @Model.PublicTransportRoute.RouteEmissions.NOX g</h6>
-<h6 class="display-8">PM10: @Model.PublicTransportRoute.RouteEmissions.PM10 g</h6>
+<div class="row">
+    <div class="column" style="background-color:#aaa;">
+        <div>Dauer: @Model.PublicTransportRoute.Duration min</div>
+        <div>Distanz: @Model.PublicTransportRoute.Distance km</div>
+        <div>Abfahrt: @Model.PublicTransportRoute.DepartureTime</div>
+        <div>Ankunft: @Model.PublicTransportRoute.ArrivalTime</div>
+
+        <h3>Emissionen</h3>
+        <div>CO2 Equivalent: @Model.PublicTransportRoute.RouteEmissions.CO2Equivalent g</div>
+        <div>CO2: @Model.PublicTransportRoute.RouteEmissions.CO2 g</div>
+        <div>NOX: @Model.PublicTransportRoute.RouteEmissions.NOX g</div>
+        <div>PM10: @Model.PublicTransportRoute.RouteEmissions.PM10 g</div>
+    </div>
+    <div class="column" style="background-color:#ccc;">
+
+        <h3>Maneuvers</h3>
+        <div class="maneuver">
+            @foreach (var maneuver in Model.PublicTransportRoute.Maneuvers)
+            {
+                <div>@maneuver.TransportName</div>
+                <div>@maneuver.Duration min</div>
+
+                @if (maneuver.Stops.Count() > 0)
+                {
+                    <div>Stationen</div>
+                    @foreach (string stop in maneuver.Stops)
+                    {
+                        <div>@stop</div>
+                    }
+                }
+
+            }
+        </div>
+
+    </div>
+</div>
+
 
 <h2>Fahrrad</h2>
-<h5 class="display-8">Dauer: @Model.BicycleRoute.Duration min</h5>
-<h5 class="display-8">Distanz: @Model.BicycleRoute.Distance km</h5>
-<h5 class="display-8">Abfahrt: @Model.BicycleRoute.DepartureTime</h5>
-<h5 class="display-8">Ankunft: @Model.BicycleRoute.ArrivalTime</h5>
 
-<h4 class="display-7">Emissionen</h4>
-<h6 class="display-8">CO2 Equivalent: @Model.BicycleRoute.RouteEmissions.CO2Equivalent g</h6>
-<h6 class="display-8">CO2: @Model.BicycleRoute.RouteEmissions.CO2 g</h6>
-<h6 class="display-8">NOX: @Model.BicycleRoute.RouteEmissions.NOX g</h6>
-<h6 class="display-8">PM10: @Model.BicycleRoute.RouteEmissions.PM10 g</h6>
+<div class="row">
+    <div class="column" style="background-color:#aaa;">
+        <div>Dauer: @Model.BicycleRoute.Duration min</div>
+        <div>Distanz: @Model.BicycleRoute.Distance km</div>
+        <div>Abfahrt: @Model.BicycleRoute.DepartureTime</div>
+        <div>Ankunft: @Model.BicycleRoute.ArrivalTime</div>
 
-<img src="~/Maps/@(Model.BicycleRoute.Id).png" alt="Bicycle route map" />
+        <h3>Emissionen</h3>
+        <div>CO2 Equivalent: @Model.BicycleRoute.RouteEmissions.CO2Equivalent g</div>
+        <div>CO2: @Model.BicycleRoute.RouteEmissions.CO2 g</div>
+        <div>NOX: @Model.BicycleRoute.RouteEmissions.NOX g</div>
+        <div>PM10: @Model.BicycleRoute.RouteEmissions.PM10 g</div>
+    </div>
+    <div class="column" style="background-color:#bbb;">
+        <img src="~/Maps/@(Model.BicycleRoute.Id).png" alt="Bicycle route map" height="300" />
+    </div>
+    <div class="column" style="background-color:#ccc;">
+
+        <h3>Maneuvers</h3>
+        <div class="maneuver">
+            @foreach (var maneuver in Model.BicycleRoute.Maneuvers)
+            {
+                <div>@maneuver.Text</div>
+                <img src="@maneuver.Image" Height="40" Width="40" />
+            }
+        </div>
+
+    </div>
+</div>
