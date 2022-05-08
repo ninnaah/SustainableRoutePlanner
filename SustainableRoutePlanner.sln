@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceAgents", "ServiceAge
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{21FDF8CA-E820-4F3D-A143-B54B526CE3FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmissionCalculator", "EmissionCalculator\EmissionCalculator.csproj", "{A8BEBE13-B582-4A52-B703-DEA319AB24B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmissionCalculators", "EmissionCalculators\EmissionCalculators.csproj", "{8E2EB4D1-27E7-4E92-A5BB-90B13D9ED828}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{21FDF8CA-E820-4F3D-A143-B54B526CE3FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21FDF8CA-E820-4F3D-A143-B54B526CE3FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21FDF8CA-E820-4F3D-A143-B54B526CE3FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A8BEBE13-B582-4A52-B703-DEA319AB24B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A8BEBE13-B582-4A52-B703-DEA319AB24B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A8BEBE13-B582-4A52-B703-DEA319AB24B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A8BEBE13-B582-4A52-B703-DEA319AB24B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E2EB4D1-27E7-4E92-A5BB-90B13D9ED828}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2EB4D1-27E7-4E92-A5BB-90B13D9ED828}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2EB4D1-27E7-4E92-A5BB-90B13D9ED828}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2EB4D1-27E7-4E92-A5BB-90B13D9ED828}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

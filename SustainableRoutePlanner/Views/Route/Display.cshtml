@@ -26,13 +26,35 @@
 <h5 class="display-8">Ankunft: @Model.CarRoute.ArrivalTime</h5>
 
 <h4 class="display-7">Emissionen</h4>
-<h6 class="display-8">CO2 Equivalent: @Model.CarRoute.RouteEmissions.CO2Equivalent g/km</h6>
-<h6 class="display-8">CO2: @Model.CarRoute.RouteEmissions.CO2 g/km</h6>
-<h6 class="display-8">NOX: @Model.CarRoute.RouteEmissions.NOX g/km</h6>
-<h6 class="display-8">PM10: @Model.CarRoute.RouteEmissions.PM10 g/km</h6>
+<h6 class="display-8">CO2 Equivalent: @Model.CarRoute.RouteEmissions.CO2Equivalent g</h6>
+<h6 class="display-8">CO2: @Model.CarRoute.RouteEmissions.CO2 g</h6>
+<h6 class="display-8">NOX: @Model.CarRoute.RouteEmissions.NOX g</h6>
+<h6 class="display-8">PM10: @Model.CarRoute.RouteEmissions.PM10 g</h6>
 
-<img src="~/Maps/@Model.CarRoute.Id .png" alt="Car route map"/>
+<img src="~/Maps/@(Model.CarRoute.Id).png" alt="Car route map" />
 
 <h2>Öffentliche Verkehrsmittel</h2>
+<h5 class="display-8">Dauer: @Model.PublicTransportRoute.Duration min</h5>
+<h5 class="display-8">Distanz: @Model.PublicTransportRoute.Distance km (Luftlinie)</h5>
+<h5 class="display-8">Abfahrt: @Model.PublicTransportRoute.DepartureTime</h5>
+<h5 class="display-8">Ankunft: @Model.PublicTransportRoute.ArrivalTime</h5>
+
+<h4 class="display-7">Emissionen</h4>
+<h6 class="display-8">CO2 Equivalent: @Model.PublicTransportRoute.RouteEmissions.CO2Equivalent g</h6>
+<h6 class="display-8">CO2: @Model.PublicTransportRoute.RouteEmissions.CO2 g</h6>
+<h6 class="display-8">NOX: @Model.PublicTransportRoute.RouteEmissions.NOX g</h6>
+<h6 class="display-8">PM10: @Model.PublicTransportRoute.RouteEmissions.PM10 g</h6>
 
 <h2>Fahrrad</h2>
+<h5 class="display-8">Dauer: @Model.BicycleRoute.Duration min</h5>
+<h5 class="display-8">Distanz: @Model.BicycleRoute.Distance km</h5>
+<h5 class="display-8">Abfahrt: @Model.BicycleRoute.DepartureTime</h5>
+<h5 class="display-8">Ankunft: @Model.BicycleRoute.ArrivalTime</h5>
+
+<h4 class="display-7">Emissionen</h4>
+<h6 class="display-8">CO2 Equivalent: @Model.BicycleRoute.RouteEmissions.CO2Equivalent g</h6>
+<h6 class="display-8">CO2: @Model.BicycleRoute.RouteEmissions.CO2 g</h6>
+<h6 class="display-8">NOX: @Model.BicycleRoute.RouteEmissions.NOX g</h6>
+<h6 class="display-8">PM10: @Model.BicycleRoute.RouteEmissions.PM10 g</h6>
+
+<img src="~/Maps/@(Model.BicycleRoute.Id).png" alt="Bicycle route map" />

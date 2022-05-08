@@ -22,8 +22,9 @@ namespace SustainableRoutePlanner.Models
         public DateTime? DepartureTime { get; set; }
         public DateTime? ArrivalTime { get; set; }
 
-        public RouteResponse PublicTransportRoute { get; set; }
+        public PublicTransportRouteResponse PublicTransportRoute { get; set; }
         public RouteResponse CarRoute { get; set; }
         public RouteResponse BicycleRoute { get; set; }
+
     }
 }

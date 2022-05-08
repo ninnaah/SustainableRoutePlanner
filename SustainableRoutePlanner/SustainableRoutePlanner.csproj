@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EmissionCalculator\EmissionCalculator.csproj" />
+    <ProjectReference Include="..\EmissionCalculators\EmissionCalculators.csproj" />
     <ProjectReference Include="..\ServiceAgents\ServiceAgents.csproj" />
   </ItemGroup>
 

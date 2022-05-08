@@ -33,19 +33,23 @@ namespace SustainableRoutePlanner.Controllers
         public async Task<IActionResult> Display(CreateRoute createRoute)
         {
 
-            //CarEmissionCalculator carCalculator = new CarEmissionCalculator(EmissionLoader, new GasCar(), "Gumpendorferstraße 103, Wien, Österreich, 1060", "Heiligenstädterstraße 33, Wien, Österreich, 1190", new DateTime(2022, 4, 24, 5, 10, 20), null);
-
             CarEmissionCalculator carCalculator = new CarEmissionCalculator(EmissionLoader, new GasCar(), createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
             RouteResponse carResponse = await carCalculator.CalcEmissions();
             Debug.WriteLine(carResponse);
 
+            PublicTransportEmissionCalculator publicTransportCalculator = new PublicTransportEmissionCalculator(EmissionLoader, new Bus(), createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
+            PublicTransportRouteResponse publicTransportResponse = await publicTransportCalculator.CalcEmissions();
+            Debug.WriteLine(publicTransportResponse);
 
-            /*BicycleEmissionCalculator bicycleCalculator = new BicycleEmissionCalculator(EmissionLoader, new EBike(), "Gumpendorferstraße 103", "Heiligenstädterstraße 33", null, new DateTime(2022, 4, 24, 5, 10, 20));
+            BicycleEmissionCalculator bicycleCalculator = new BicycleEmissionCalculator(EmissionLoader, new EBike(), createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
             RouteResponse bicycleResponse = await bicycleCalculator.CalcEmissions();
-            Debug.WriteLine(bicycleResponse);*/
+            Debug.WriteLine(bicycleResponse);
 
             Route route = new Route(createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
+
             route.CarRoute = carResponse;
+            route.BicycleRoute = bicycleResponse;
+            route.PublicTransportRoute = publicTransportResponse;
 
             return View(route);
         }

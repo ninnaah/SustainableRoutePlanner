@@ -1,5 +1,4 @@
-﻿using EmissionCalculator;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Models;
 using Models.Transport;
