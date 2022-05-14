@@ -10,11 +10,18 @@ namespace SustainableRoutePlanner.Models
     {
         public Route(string departureAdress, string arrivalAdress, DateTime? departureTime, DateTime? arrivalTime)
         {
+            if(departureTime == null && arrivalTime == null)
+            {
+                DepartureTime = DateTime.Now;
+            }
+            else 
+            {
+                DepartureTime = departureTime;
+                ArrivalTime = arrivalTime;
+            }
+
             DepartureAdress = departureAdress;
             ArrivalAdress = arrivalAdress;
-
-            DepartureTime = departureTime;
-            ArrivalTime = arrivalTime;
         } 
         public string DepartureAdress { get; set; }
         public string ArrivalAdress { get; set; }

@@ -64,7 +64,11 @@ namespace ServiceAgents
             string date = "";
             string localTime = "";
 
-            if (routeRequest.ArrivalTime != null)
+            if (routeRequest.ArrivalTime == null && routeRequest.DepartureTime == null)
+            {
+                routeResponse.DepartureTime = DateTime.Now;
+            }
+            else if (routeRequest.ArrivalTime != null)
             {
                 timeType = 3;
                 date = routeRequest.ArrivalTime?.ToString("MM/dd/yyyy");
@@ -98,7 +102,7 @@ namespace ServiceAgents
             SendMapRequest(routeRequest, sessionId);
 
 
-            routeResponse.Duration = (double) obj["route"]["time"]/60;
+            routeResponse.Duration = Math.Round((double)obj["route"]["time"] / 60, 2);
             routeResponse.Distance = (double) obj["route"]["distance"];
 
             //maneuvers

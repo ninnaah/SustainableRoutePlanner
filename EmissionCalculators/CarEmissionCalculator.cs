@@ -34,6 +34,15 @@ namespace EmissionCalculator
         {
             RouteResponse response = await GetRoute();
 
+            if(response.DepartureTime != null)
+            {
+                response.ArrivalTime = response.DepartureTime?.AddMinutes(response.Duration);
+            }
+            else if(response.ArrivalTime != null)
+            {
+                response.DepartureTime = response.ArrivalTime?.AddMinutes(-response.Duration);
+            }
+
             if (Car.GetType() == typeof(GasCar))
             {
                 response.RouteEmissions.CO2Equivalent = EmissionFactors.EmissionFactors.GasCar.CO2Equivalent * response.Distance;

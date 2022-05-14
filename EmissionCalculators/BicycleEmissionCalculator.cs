@@ -32,7 +32,16 @@ namespace EmissionCalculator
         {
             RouteResponse response = await GetRoute();
 
-            if(Bicycle.GetType() == typeof(Bicycle))
+            if (response.DepartureTime != null)
+            {
+                response.ArrivalTime = response.DepartureTime?.AddMinutes(response.Duration);
+            }
+            else if (response.ArrivalTime != null)
+            {
+                response.DepartureTime = response.ArrivalTime?.AddMinutes(-response.Duration);
+            }
+
+            if (Bicycle.GetType() == typeof(Bicycle))
             {
                 response.RouteEmissions.CO2 = EmissionFactors.EmissionFactors.Bicycle.CO2 * response.Distance;
                 response.RouteEmissions.NOX = EmissionFactors.EmissionFactors.Bicycle.NOX * response.Distance;

@@ -27,5 +27,7 @@ namespace SustainableRoutePlanner.Models
         public DateTime? DepartureTime { get; set; }
         public DateTime? ArrivalTime { get; set; }
 
+        public string CarType { get; set; }
+        public string BicycleType { get; set; }
     }
 }

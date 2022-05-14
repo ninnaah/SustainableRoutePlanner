@@ -31,7 +31,14 @@ namespace ServiceAgents
             string date = "";
             string localTime = "";
 
-            if (routeRequest.ArrivalTime != null)
+            if(routeRequest.ArrivalTime == null && routeRequest.DepartureTime == null)
+            {
+                timeType = "dep";
+                date = DateTime.Now.ToString("yyyyMMdd");
+                localTime = DateTime.Now.ToString("HH:mm");
+                routeResponse.DepartureTime = DateTime.Now;
+            }
+            else if (routeRequest.ArrivalTime != null)
             {
                 timeType = "arr";
                 date = routeRequest.ArrivalTime?.ToString("yyyyMMdd");
@@ -63,7 +70,7 @@ namespace ServiceAgents
 
             //in hh:mm
             TimeSpan timeSpan = (TimeSpan)obj["trips"][0]["duration"];
-            routeResponse.Duration = timeSpan.TotalMinutes;
+            routeResponse.Duration = Math.Round(timeSpan.TotalMinutes, 2);
 
             //routeResponse.Distance = (double)obj["trips"][0]["distance"]/1000;
 

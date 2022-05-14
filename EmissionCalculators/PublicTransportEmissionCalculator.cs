@@ -13,12 +13,10 @@ namespace EmissionCalculator
 {
     public class PublicTransportEmissionCalculator : EmissionCalculator
     {
-        public IPublicTransport PublicTransport;
 
-        public PublicTransportEmissionCalculator(EmissionFactorsLoader emissionFactors, IPublicTransport publicTransport, string departureLocation, string arrivalLocation, DateTime? departureTime, DateTime? arrivalTime)
+        public PublicTransportEmissionCalculator(EmissionFactorsLoader emissionFactors, string departureLocation, string arrivalLocation, DateTime? departureTime, DateTime? arrivalTime)
         {
             EmissionFactors = emissionFactors;
-            PublicTransport = publicTransport;
 
             DepartureLocation = departureLocation;
             ArrivalLocation = arrivalLocation;
@@ -32,8 +30,17 @@ namespace EmissionCalculator
         {
             PublicTransportRouteResponse response = await GetRoute();
 
+            if (response.DepartureTime != null)
+            {
+                response.ArrivalTime = response.DepartureTime?.AddMinutes(response.Duration);
+            }
+            else if (response.ArrivalTime != null)
+            {
+                response.DepartureTime = response.ArrivalTime?.AddMinutes(-response.Duration);
+            }
 
-            foreach(PublicTransportRouteManeuver maneuver in response.Maneuvers)
+
+            foreach (PublicTransportRouteManeuver maneuver in response.Maneuvers)
             {
                 if (maneuver.TransportType == "Zug" || maneuver.TransportType == "S-Bahn" || maneuver.TransportType == "U-Bahn" 
                     || maneuver.TransportType == "Stadtbahn" || maneuver.TransportType == "Straßen-/Trambahn" || maneuver.TransportType == "Seil-/Zahnradbahn")

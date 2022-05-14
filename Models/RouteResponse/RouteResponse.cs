@@ -19,5 +19,7 @@ namespace Models
 
         public List<RouteManeuver> Maneuvers { get; set; }
 
+        public string TransportType { get; set; }
+
     }
 }

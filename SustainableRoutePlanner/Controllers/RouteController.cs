@@ -32,18 +32,50 @@ namespace SustainableRoutePlanner.Controllers
         [HttpPost]
         public async Task<IActionResult> Display(CreateRoute createRoute)
         {
+            ICar car = null;
+            string carType = "";
 
-            CarEmissionCalculator carCalculator = new CarEmissionCalculator(EmissionLoader, new GasCar(), createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
+            if (createRoute.CarType == "diesel")
+            {
+                car = new DieselCar();
+                carType = "Diesel";
+            }
+            else if (createRoute.CarType == "gas")
+            {
+                car = new GasCar();
+                carType = "Benzin";
+            }
+            else if (createRoute.CarType == "electric")
+            {
+                car = new ElectricCar();
+                carType = "Elektrisch";
+            }
+
+
+            IBicycle bicycle = null;
+            string bicycleType = "";
+
+            if (createRoute.BicycleType == "bicycle")
+            {
+                bicycle = new Bicycle();
+                bicycleType = "Fahrrad"; 
+            }
+            else if (createRoute.BicycleType == "electric")
+            {
+                bicycle = new EBike();
+                bicycleType = "E-Bike";
+            }
+
+            CarEmissionCalculator carCalculator = new CarEmissionCalculator(EmissionLoader, car, createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
             RouteResponse carResponse = await carCalculator.CalcEmissions();
-            Debug.WriteLine(carResponse);
+            carResponse.TransportType = carType;
 
-            PublicTransportEmissionCalculator publicTransportCalculator = new PublicTransportEmissionCalculator(EmissionLoader, new Bus(), createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
+            PublicTransportEmissionCalculator publicTransportCalculator = new PublicTransportEmissionCalculator(EmissionLoader, createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
             PublicTransportRouteResponse publicTransportResponse = await publicTransportCalculator.CalcEmissions();
-            Debug.WriteLine(publicTransportResponse);
 
-            BicycleEmissionCalculator bicycleCalculator = new BicycleEmissionCalculator(EmissionLoader, new EBike(), createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
+            BicycleEmissionCalculator bicycleCalculator = new BicycleEmissionCalculator(EmissionLoader, bicycle, createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
             RouteResponse bicycleResponse = await bicycleCalculator.CalcEmissions();
-            Debug.WriteLine(bicycleResponse);
+            bicycleResponse.TransportType = bicycleType;
 
             Route route = new Route(createRoute.DepartureAdress, createRoute.ArrivalAdress, createRoute.DepartureTime, createRoute.ArrivalTime);
 

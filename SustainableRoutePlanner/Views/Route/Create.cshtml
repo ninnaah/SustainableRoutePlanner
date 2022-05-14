@@ -1,9 +1,17 @@
 ﻿@model SustainableRoutePlanner.Models.CreateRoute
 
+
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+<style>
+    .form-group {
+        padding: 1em;
+    }
+</style>
+
 
 <h1>Route und Emissionen berechnen</h1>
 
@@ -13,12 +21,12 @@
         <form method="post" asp-action="Display">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="DepartureAdress" class="control-label">Start</label>
+                <label asp-for="DepartureAdress" class="control-label">Start*</label>
                 <input asp-for="DepartureAdress" class="form-control" />
                 <span asp-validation-for="DepartureAdress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ArrivalAdress" class="control-label">Ziel</label>
+                <label asp-for="ArrivalAdress" class="control-label">Ziel*</label>
                 <input asp-for="ArrivalAdress" class="form-control" />
                 <span asp-validation-for="ArrivalAdress" class="text-danger"></span>
             </div>
@@ -32,8 +40,55 @@
                 <input asp-for="ArrivalTime" class="form-control" />
                 <span asp-validation-for="ArrivalTime" class="text-danger"></span>
             </div>
+
+
             <div class="form-group">
-                <input type="submit" value="Route berechnen" class="btn btn-primary" />
+                <label class="control-label">Autoantrieb</label>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="CarType" id="diesel" value="diesel" checked>
+                        Diesel
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="CarType" id="gas" value="gas">
+                        Benzin
+                    </label>
+                </div>
+                <div class="form-check disabled">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="CarType" id="electric" value="electric">
+                        Elektrisch
+                    </label>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="control-label">Fahrradtyp</label>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="BicycleType" id="bicycle" value="bicycle" checked>
+                        Fahrrad
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="BicycleType" id="electric" value="electric">
+                        E-Bike
+                    </label>
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="form-group">
+                <input type="submit" value="Route berechnen" class="btn btn-outline-success" />
             </div>
         </form>
     </div>
