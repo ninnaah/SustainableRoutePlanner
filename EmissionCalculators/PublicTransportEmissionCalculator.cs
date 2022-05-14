@@ -30,15 +30,7 @@ namespace EmissionCalculator
         {
             PublicTransportRouteResponse response = await GetRoute();
 
-            if (response.DepartureTime != null)
-            {
-                response.ArrivalTime = response.DepartureTime?.AddMinutes(response.Duration);
-            }
-            else if (response.ArrivalTime != null)
-            {
-                response.DepartureTime = response.ArrivalTime?.AddMinutes(-response.Duration);
-            }
-
+            CalcTime(ref response);
 
             foreach (PublicTransportRouteManeuver maneuver in response.Maneuvers)
             {
@@ -68,6 +60,18 @@ namespace EmissionCalculator
             ServiceAgentRequest reqModel = new ServiceAgentRequest(DepartureLocation, ArrivalLocation, DepartureTime, ArrivalTime);
             EFAAgent agent = new EFAAgent();
             return await agent.GetRouteValues(reqModel);
+        }
+
+        public void CalcTime(ref PublicTransportRouteResponse response)
+        {
+            if (response.DepartureTime != null)
+            {
+                response.ArrivalTime = response.DepartureTime?.AddMinutes(response.Duration);
+            }
+            else if (response.ArrivalTime != null)
+            {
+                response.DepartureTime = response.ArrivalTime?.AddMinutes(-response.Duration);
+            }
         }
 
 

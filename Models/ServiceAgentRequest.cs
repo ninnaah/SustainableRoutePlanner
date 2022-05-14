@@ -38,7 +38,6 @@ namespace Models
         //fastest, shortest, bicycle 
         public string RouteType { get; set; }
 
-        //meh?
         public Guid Id { get; set; }
 
     }

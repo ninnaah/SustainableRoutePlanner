@@ -11,8 +11,6 @@ namespace Models
         public string TransportName { get; set; }
         public string TransportType { get; set; }
         public List<string> Stops { get; set; }
-
-        //gibt es für jedes verkehsmittel die strecke in efa?
         public double Distance { get; set; }
         public double Duration { get; set; }
 

@@ -72,8 +72,6 @@ namespace ServiceAgents
             TimeSpan timeSpan = (TimeSpan)obj["trips"][0]["duration"];
             routeResponse.Duration = Math.Round(timeSpan.TotalMinutes, 2);
 
-            //routeResponse.Distance = (double)obj["trips"][0]["distance"]/1000;
-
 
             foreach (JObject leg in obj["trips"][0]["legs"])
             {

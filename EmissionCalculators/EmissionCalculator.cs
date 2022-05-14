@@ -18,5 +18,18 @@ namespace EmissionCalculator
         public DateTime? DepartureTime { get; set; }
         public DateTime? ArrivalTime { get; set; }
 
+
+        public void CalcTime(ref RouteResponse response)
+        {
+            if (response.DepartureTime != null)
+            {
+                response.ArrivalTime = response.DepartureTime?.AddMinutes(response.Duration);
+            }
+            else if (response.ArrivalTime != null)
+            {
+                response.DepartureTime = response.ArrivalTime?.AddMinutes(-response.Duration);
+            }
+        }
+
     }
 }

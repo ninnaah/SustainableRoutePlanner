@@ -32,14 +32,7 @@ namespace EmissionCalculator
         {
             RouteResponse response = await GetRoute();
 
-            if (response.DepartureTime != null)
-            {
-                response.ArrivalTime = response.DepartureTime?.AddMinutes(response.Duration);
-            }
-            else if (response.ArrivalTime != null)
-            {
-                response.DepartureTime = response.ArrivalTime?.AddMinutes(-response.Duration);
-            }
+            CalcTime(ref response);
 
             if (Bicycle.GetType() == typeof(Bicycle))
             {
