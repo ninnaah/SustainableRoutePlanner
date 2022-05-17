@@ -1,5 +1,6 @@
 ﻿using Models;
 using Models.Transport;
+using ServiceAgents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace EmissionCalculator
 {
     public class EmissionCalculator
     {
+
         public EmissionFactorsLoader EmissionFactors { get; set; }
 
         public string DepartureLocation { get; set; }

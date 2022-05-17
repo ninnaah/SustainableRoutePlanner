@@ -13,17 +13,17 @@ using System.Globalization;
 
 namespace ServiceAgents
 {
-    public class EFAAgent
+    public class EFAAgent : IServiceAgent
     {
-        public async Task<PublicTransportRouteResponse> GetRouteValues(ServiceAgentRequest routeReq)
+        public async Task<IRouteResponse> GetRouteValues(ServiceAgentRequest routeReq)
         {
-            Task<PublicTransportRouteResponse> responseModelTask = SendRouteRequest(routeReq);
-            PublicTransportRouteResponse responseModel = await responseModelTask;
+            Task<IRouteResponse> responseModelTask = SendRouteRequest(routeReq);
+            IRouteResponse responseModel = await responseModelTask;
 
             return responseModel;
         }
 
-        private static async Task<PublicTransportRouteResponse> SendRouteRequest(ServiceAgentRequest routeRequest)
+        private static async Task<IRouteResponse> SendRouteRequest(ServiceAgentRequest routeRequest)
         {
             PublicTransportRouteResponse routeResponse = new PublicTransportRouteResponse(routeRequest.Id);
 
@@ -78,7 +78,7 @@ namespace ServiceAgents
                 //calc distance
                 double[] firstCoords = GetCoordinates((string)leg["points"][0]["ref"]["coords"]);
                 double[] secondCoords = GetCoordinates((string)leg["points"][1]["ref"]["coords"]);
-                double distance = DistanceBetweenPlaces(firstCoords[1], firstCoords[0], secondCoords[1], secondCoords[0]);
+                double distance = CalcDistanceBetweenPoints(firstCoords[1], firstCoords[0], secondCoords[1], secondCoords[0]);
 
                 if ((string)leg["mode"]["product"] == "Fussweg")
                 {
@@ -108,7 +108,7 @@ namespace ServiceAgents
             return routeResponse;
         }
 
-        public static double[] GetCoordinates(string responseCoordinates)
+        private static double[] GetCoordinates(string responseCoordinates)
         {
             string[] coordsArray = responseCoordinates.Split(',');
             double[] coords = new double[2];
@@ -122,7 +122,7 @@ namespace ServiceAgents
         }
 
         //https://stackoverflow.com/questions/6544286/calculate-distance-of-two-geo-points-in-km-c-sharp
-        public static double DistanceBetweenPlaces(double lon1, double lat1, double lon2, double lat2)
+        private static double CalcDistanceBetweenPoints(double lon1, double lat1, double lon2, double lat2)
         {
             double R = 6371; // km
 

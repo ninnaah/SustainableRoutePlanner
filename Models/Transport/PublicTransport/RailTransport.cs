@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models.Transport
 {
-    // U-Bahn, Straßenbahn, S-Bahn, Regionalzug
-    public class PublicTransport : IPublicTransport
+    public class RailTransport : IPublicTransport
     {
         public double CO2Equivalent { get; set; }
         public double CO2 { get; set; }

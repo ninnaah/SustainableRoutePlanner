@@ -52,7 +52,7 @@ namespace EmissionCalculator
         {
             ServiceAgentRequest reqModel = new ServiceAgentRequest(DepartureLocation, ArrivalLocation, DepartureTime, ArrivalTime, "bicycle");
             MapQuestAgent agent = new MapQuestAgent();
-            return await agent.GetRouteValues(reqModel);
+            return (RouteResponse) await agent.GetRouteValues(reqModel);
 
         }
 

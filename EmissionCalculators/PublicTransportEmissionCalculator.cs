@@ -59,7 +59,7 @@ namespace EmissionCalculator
         {
             ServiceAgentRequest reqModel = new ServiceAgentRequest(DepartureLocation, ArrivalLocation, DepartureTime, ArrivalTime);
             EFAAgent agent = new EFAAgent();
-            return await agent.GetRouteValues(reqModel);
+            return (PublicTransportRouteResponse) await agent.GetRouteValues(reqModel);
         }
 
         public void CalcTime(ref PublicTransportRouteResponse response)

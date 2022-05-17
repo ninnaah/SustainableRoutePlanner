@@ -14,7 +14,7 @@ namespace Models
         public DieselCar DieselCar { get; set; }
         public ElectricCar ElectricCar { get; set; }
         public Bus Bus { get; set; }
-        public PublicTransport PublicTransport { get; set; }
+        public RailTransport PublicTransport { get; set; }
         public Bicycle Bicycle { get; set; }
         public EBike EBike { get; set; }
     }

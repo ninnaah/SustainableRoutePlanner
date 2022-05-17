@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace ServiceAgents
 {
-    public class MapQuestAgent
+    public class MapQuestAgent : IServiceAgent
     {
         private static JObject _boundingBox;
 
@@ -25,7 +25,7 @@ namespace ServiceAgents
             LoadConfig();
         }
 
-        public void LoadConfig()
+        private void LoadConfig()
         {
             IConfiguration configBuilder = new ConfigurationBuilder()
                 .AddJsonFile("config.json", true)
@@ -38,12 +38,12 @@ namespace ServiceAgents
             Debug.WriteLine($"Loaded configuration");
         }
 
-        public async Task<RouteResponse> GetRouteValues(ServiceAgentRequest routeReq)
+        public async Task<IRouteResponse> GetRouteValues(ServiceAgentRequest routeReq)
         {
             routeReq = DetermineLocation(routeReq);
 
-            Task<RouteResponse> responseModelTask = SendRouteRequest(routeReq);
-            RouteResponse responseModel = await responseModelTask;
+            Task<IRouteResponse> responseModelTask = SendRouteRequest(routeReq);
+            IRouteResponse responseModel = await responseModelTask;
 
             return responseModel;
         }
@@ -56,7 +56,7 @@ namespace ServiceAgents
             return routeReq;
         }
 
-        private static async Task<RouteResponse> SendRouteRequest(ServiceAgentRequest routeRequest)
+        private static async Task<IRouteResponse> SendRouteRequest(ServiceAgentRequest routeRequest)
         {
             RouteResponse routeResponse = new RouteResponse(routeRequest.Id);
 
@@ -87,7 +87,7 @@ namespace ServiceAgents
             string getRequest = $"http://www.mapquestapi.com/directions/v2/route?key={_key}&unit=k&to={routeRequest.ArrivalAdress}&from={routeRequest.DepartureAdress}&routeType={routeRequest.RouteType}&timeType={timeType}&date={date}&localTime={localTime}";
             Debug.WriteLine($"Directions Request: {getRequest}");
 
-
+            
             HttpClient httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.GetAsync(getRequest);
             string responseBody = await response.Content.ReadAsStringAsync();
@@ -123,7 +123,7 @@ namespace ServiceAgents
             return routeResponse;
         }
 
-        public static async void SendMapRequest(ServiceAgentRequest routeReq, string sessionId)
+        private static async void SendMapRequest(ServiceAgentRequest routeReq, string sessionId)
         {
             try
             {
