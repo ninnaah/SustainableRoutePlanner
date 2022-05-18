@@ -14,6 +14,10 @@ namespace Models
         public double Distance { get; set; }
         public double Duration { get; set; }
 
+
+        public string From { get; set; }
+        public string To { get; set; }
+
         public PublicTransportRouteManeuver(string transportName, string transportType, double distance, double duration)
         {
             TransportName = transportName;
@@ -24,13 +28,16 @@ namespace Models
         }
 
         //fußweg
-        public PublicTransportRouteManeuver(string transport, double distance, double duration)
+        public PublicTransportRouteManeuver(string transport, string from, string to, double distance, double duration)
         {
             TransportType = transport;
             TransportName = transport;
             Duration = duration;
             Distance = distance;
             Stops = new List<string>();
+
+            From = from;
+            To = to;
         }
 
 

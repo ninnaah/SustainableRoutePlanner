@@ -219,8 +219,8 @@
             </div>
             <h5>CO2 Äquivalente: @string.Format("{0:0.00}", @Model.PublicTransportRoute.RouteEmissions.CO2Equivalent) g</h5>
             <h5>CO2: @string.Format("{0:0.00}", @Model.PublicTransportRoute.RouteEmissions.CO2) g</h5>
-            <h5>NOX: @string.Format("{0:0.00}", @Model.PublicTransportRoute.RouteEmissions.NOX) g</h5>
-            <h5>PM10: @string.Format("{0:0.00}", @Model.PublicTransportRoute.RouteEmissions.PM10) g</h5>
+            <h5>NOX: @string.Format("{0:0.0000}", @Model.PublicTransportRoute.RouteEmissions.NOX) g</h5>
+            <h5>PM10: @string.Format("{0:0.0000}", @Model.PublicTransportRoute.RouteEmissions.PM10) g</h5>
         </div>
 
     </div>
@@ -244,6 +244,12 @@
                             <li>@stop</li>
                         }
                     </ul>
+                }
+
+                @if (@maneuver.TransportType == "Fussweg")
+                {
+                    <div class="minDiv">Von: @maneuver.From</div>
+                    <div class="minDiv">Bis: @maneuver.To</div>
                 }
 
             }
@@ -276,10 +282,21 @@
                 <img src="~/icons/leaf2.png" />
                 <h3>Emissionen</h3>
             </div>
-            <h5>CO2 Äquivalente: @string.Format("{0:0.00}", @Model.BicycleRoute.RouteEmissions.CO2Equivalent) g</h5>
+            <h5>CO2 Äquivalente: n.a.</h5>
             <h5>CO2: @string.Format("{0:0.00}", @Model.BicycleRoute.RouteEmissions.CO2) g</h5>
-            <h5>NOX: @string.Format("{0:0.00}", @Model.BicycleRoute.RouteEmissions.NOX) g</h5>
-            <h5>PM10: @string.Format("{0:0.00}", @Model.BicycleRoute.RouteEmissions.PM10) g</h5>
+
+            @if (@Model.BicycleRoute.TransportType == "Fahrrad")
+            {
+                <h5>NOX: @string.Format("{0:0.0000}", @Model.BicycleRoute.RouteEmissions.NOX) g</h5>
+                <h5>PM10: @string.Format("{0:0.0000}", @Model.BicycleRoute.RouteEmissions.PM10) g</h5>
+            }
+            @if (@Model.BicycleRoute.TransportType == "E-Bike")
+            {
+                <h5>NOX: n.a.</h5>
+                <h5>PM10: n.a.</h5>
+            }
+
+
         </div>
 
     </div>
@@ -330,8 +347,8 @@
             </div>
             <h5>CO2 Äquivalente: @string.Format("{0:0.00}", @Model.CarRoute.RouteEmissions.CO2Equivalent) g</h5>
             <h5>CO2: @string.Format("{0:0.00}", @Model.CarRoute.RouteEmissions.CO2) g</h5>
-            <h5>NOX: @string.Format("{0:0.00}", @Model.CarRoute.RouteEmissions.NOX) g</h5>
-            <h5>PM10: @string.Format("{0:0.00}", @Model.CarRoute.RouteEmissions.PM10) g</h5>
+            <h5>NOX: @string.Format("{0:0.0000}", @Model.CarRoute.RouteEmissions.NOX) g</h5>
+            <h5>PM10: @string.Format("{0:0.0000}", @Model.CarRoute.RouteEmissions.PM10) g</h5>
         </div>
 
     </div>

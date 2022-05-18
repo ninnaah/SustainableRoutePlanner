@@ -8,7 +8,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using NetTopologySuite.Geometries;
 using System.Globalization;
 
 namespace ServiceAgents
@@ -76,13 +75,23 @@ namespace ServiceAgents
             foreach (JObject leg in obj["trips"][0]["legs"])
             {
                 //calc distance
-                double[] firstCoords = GetCoordinates((string)leg["points"][0]["ref"]["coords"]);
-                double[] secondCoords = GetCoordinates((string)leg["points"][1]["ref"]["coords"]);
-                double distance = CalcDistanceBetweenPoints(firstCoords[1], firstCoords[0], secondCoords[1], secondCoords[0]);
+
+                List<double[]> coordsList = GetCoordinates((string)leg["path"]);
+
+                double distance = 0;
+
+                for(int i = 0; i<coordsList.Count; i++)
+                {
+                    if(i+1 == coordsList.Count)
+                    {
+                        break;
+                    }
+                    distance += CalcDistance(coordsList[i][0], coordsList[i][1], coordsList[i+1][0], coordsList[i+1][1]);
+                }
 
                 if ((string)leg["mode"]["product"] == "Fussweg")
                 {
-                    PublicTransportRouteManeuver direction = new PublicTransportRouteManeuver((string)leg["mode"]["product"], distance, (double)leg["timeMinute"]);
+                    PublicTransportRouteManeuver direction = new PublicTransportRouteManeuver((string)leg["mode"]["product"], (string)leg["points"][0]["name"], (string)leg["points"][1]["name"], distance, (double)leg["timeMinute"]);
                     routeResponse.Maneuvers.Add(direction);
                 }
                 else
@@ -108,39 +117,50 @@ namespace ServiceAgents
             return routeResponse;
         }
 
-        private static double[] GetCoordinates(string responseCoordinates)
+        private static List<double[]> GetCoordinates(string coordsListString)
         {
-            string[] coordsArray = responseCoordinates.Split(',');
-            double[] coords = new double[2];
+            string[] coordsListStringArray = coordsListString.Split(' ');
 
-            //lat
-            coords[0] = Double.Parse(coordsArray[0], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
-            //lon
-            coords[1] = Double.Parse(coordsArray[1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+            List <double[]> coordsDoubleList = new List<double[]>();
 
-            return coords;
+            foreach(string coordString in coordsListStringArray)
+            {
+                string[] coordsStringArray = coordString.Split(',');
+                double[] coords = new double[2];
+
+                //lat
+                coords[0] = Double.Parse(coordsStringArray[0], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+                //lon
+                coords[1] = Double.Parse(coordsStringArray[1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture);
+
+                coordsDoubleList.Add(coords);
+            }
+
+
+            return coordsDoubleList;
         }
 
-        //https://stackoverflow.com/questions/6544286/calculate-distance-of-two-geo-points-in-km-c-sharp
-        private static double CalcDistanceBetweenPoints(double lon1, double lat1, double lon2, double lat2)
+        private static double CalcDistance(double lat1, double lon1, double lat2, double lon2)
         {
-            double R = 6371; // km
+            double R = 6371; //Radius of earth in km
 
-            double sLat1 = Math.Sin(lat1 * Math.PI / 180);
-            double sLat2 = Math.Sin(lat2 * Math.PI / 180);
-            double cLat1 = Math.Cos(lat1 * Math.PI / 180);
-            double cLat2 = Math.Cos(lat2 * Math.PI / 180);
-            double cLon = Math.Cos((lon1 * Math.PI / 180) - (lon2 * Math.PI / 180));
+            double dLat = (lat2 - lat1) * Math.PI / 180;
+            double dLon = (lon2 - lon1) * Math.PI / 180;
 
-            double cosD = sLat1 * sLat2 + cLat1 * cLat2 * cLon;
+            double x = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) + 
+                    Math.Cos(lat1 * Math.PI / 180) * 
+                    Math.Cos(lat2 * Math.PI / 180) * 
+                    Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
 
-            double d = Math.Acos(cosD);
+            double d = 2 * Math.Asin(Math.Sqrt(x));
 
-            double dist = R * d;
+            double distance = R * d;
 
-            return dist;
+            return distance;
         }
 
+
+        //double d = 2 * Math.Asin(Math.Min(1, Math.Sqrt(x)));
 
     }
 }
