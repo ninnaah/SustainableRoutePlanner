@@ -37,12 +37,12 @@ namespace EmissionCalculator
             if (Bicycle.GetType() == typeof(Bicycle))
             {
                 response.RouteEmissions.CO2 = EmissionFactors.EmissionFactors.Bicycle.CO2 * response.Distance;
-                response.RouteEmissions.NOX = EmissionFactors.EmissionFactors.Bicycle.NOX * response.Distance;
-                response.RouteEmissions.PM10 = EmissionFactors.EmissionFactors.Bicycle.PM10 * response.Distance;
             }
             else if(Bicycle.GetType() == typeof(EBike))
             {
                 response.RouteEmissions.CO2 = EmissionFactors.EmissionFactors.EBike.CO2 * response.Distance;
+                response.RouteEmissions.NOX = EmissionFactors.EmissionFactors.EBike.NOX * response.Distance;
+                response.RouteEmissions.PM10 = EmissionFactors.EmissionFactors.EBike.PM10 * response.Distance;
             }
 
             return response;

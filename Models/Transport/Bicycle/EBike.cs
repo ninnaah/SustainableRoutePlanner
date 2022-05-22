@@ -9,5 +9,7 @@ namespace Models.Transport
     public class EBike : IBicycle
     {
         public double CO2 { get; set; }
+        public double NOX { get; set; }
+        public double PM10 { get; set; }
     }
 }

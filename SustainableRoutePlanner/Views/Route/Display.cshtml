@@ -287,13 +287,13 @@
 
             @if (@Model.BicycleRoute.TransportType == "Fahrrad")
             {
-                <h5>NOX: @string.Format("{0:0.0000}", @Model.BicycleRoute.RouteEmissions.NOX) g</h5>
-                <h5>PM10: @string.Format("{0:0.0000}", @Model.BicycleRoute.RouteEmissions.PM10) g</h5>
+                <h5>NOX: n.a.</h5>
+                <h5>PM10: n.a.</h5>
             }
             @if (@Model.BicycleRoute.TransportType == "E-Bike")
             {
-                <h5>NOX: n.a.</h5>
-                <h5>PM10: n.a.</h5>
+                <h5>NOX: @string.Format("{0:0.0000}", @Model.BicycleRoute.RouteEmissions.NOX) g</h5>
+                <h5>PM10: @string.Format("{0:0.0000}", @Model.BicycleRoute.RouteEmissions.PM10) g</h5>
             }
 
 
