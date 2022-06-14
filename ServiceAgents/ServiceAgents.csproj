@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="config.json" />
     <None Remove="EFAAgent.cs~RF49551107.TMP" />
     <None Remove="MapQuestAgent.cs~RF5ca5b6.TMP" />
     <None Remove="MapQuestAgent.cs~RF94cb00.TMP" />
